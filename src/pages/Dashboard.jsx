@@ -10,6 +10,7 @@ export default function Dashboard() {
   const payment = params.get('payment');
   const gateway = params.get('gateway');
   const orderId = params.get('order_id') || params.get('tran_id');
+  const paymentID = params.get('paymentID');
 
   useEffect(() => {
     const syncPayment = async () => {
@@ -18,7 +19,11 @@ export default function Dashboard() {
           await markOrderStatus({
             orderId,
             status: 'paid',
-            gatewayResponse: { gateway, payment },
+            gatewayResponse: {
+              gateway,
+              payment,
+              paymentID: paymentID || null,
+            },
           });
         } catch (error) {
           console.error(error);
@@ -27,7 +32,7 @@ export default function Dashboard() {
     };
 
     syncPayment();
-  }, [payment, gateway, orderId]);
+  }, [payment, gateway, orderId, paymentID]);
 
   return (
     <section className="py-20">
